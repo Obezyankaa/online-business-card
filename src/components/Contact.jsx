@@ -1,10 +1,11 @@
-import React from 'react'
-import styled from 'styled-components';
-import Map from './Map';
+import React, { useRef, useState } from "react";
+import emailjs from "@emailjs/browser";
+import styled from "styled-components";
+import Map from "./Map";
 
 const Section = styled.div`
   height: 100vh;
-  scroll-snap-align: center; 
+  scroll-snap-align: center;
 `;
 
 const Container = styled.div`
@@ -13,7 +14,6 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 50px;
-
 `;
 
 const Left = styled.div`
@@ -25,7 +25,6 @@ const Left = styled.div`
 
 const Title = styled.h1`
   font-weight: 200;
-
 `;
 
 const Form = styled.form`
@@ -33,7 +32,6 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   gap: 25px;
-   
 `;
 
 const Input = styled.input`
@@ -41,7 +39,6 @@ const Input = styled.input`
   background-color: lightgray;
   border: none;
   border-radius: 5px;
-
 `;
 
 const TextArea = styled.textarea`
@@ -62,19 +59,49 @@ const Button = styled.button`
 `;
 
 const Right = styled.div`
-  flex: 1 ;
+  flex: 1;
 `;
+
 export default function Contact() {
+
+  const ref = useRef();
+  const [success, setSuccess] = useState(null);
+
+  const handlerSubmit = (e) => {
+    e.preventDefault();
+
+    emailjs
+      .sendForm(
+        "service_cy5tc04",
+        "template_xba0kfp",
+        ref.current,
+        "AeP92vlqKaHdYj9Ua"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          setSuccess(true);
+        },
+        (error) => {
+          console.log(error.text);
+          setSuccess(false);
+        }
+      );
+  };
+
   return (
     <Section>
       <Container>
         <Left>
-          <Form>
-          <Title>Contact Us</Title>
-          <Input placeholder="Name"></Input>
-          <Input placeholder="Email"></Input>
-          <TextArea placeholder='Write your message' rows={10}></TextArea>
-          <Button>Send</Button>
+          <Form ref={ref} onSubmit={handlerSubmit}>
+            <Title>Contact Us</Title>
+            <Input placeholder="Name" name="name"></Input>
+            <Input placeholder="Email" name="email"></Input>
+            <TextArea placeholder="Write your message" name="message" rows={10}></TextArea>
+            <Button type="submit">Send</Button>
+            {success && 
+              "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae, architecto :)"
+            }
           </Form>
         </Left>
         <Right>
