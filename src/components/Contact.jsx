@@ -66,7 +66,6 @@ export default function Contact() {
 
   const ref = useRef();
   const [success, setSuccess] = useState(null);
-
   const handlerSubmit = (e) => {
     e.preventDefault();
 
@@ -81,12 +80,15 @@ export default function Contact() {
         (result) => {
           console.log(result.text);
           setSuccess(true);
+          ref.current[0].value = '';
+          ref.current[1].value = '';
+          ref.current[2].value = '';
         },
         (error) => {
           console.log(error.text);
           setSuccess(false);
         }
-      );
+    );
   };
 
   return (
